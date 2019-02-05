@@ -1,6 +1,7 @@
 package com.emanuel.comercial.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,19 +32,22 @@ public class OportunidadeServiceImplementacao implements OportunidadeService {
 	}
 
 	@Override
-	public void deletar(Long id) {
-		oportunidadeRepository.deleteById(id);
+	public void deletar(Long codigo) {
+		oportunidadeRepository.deleteById(codigo);
 
 	}
 
 	@Override
 	public void atualizar(Long id) {
-
+         
 	}
 
 	@Override
-	public Oportunidade findByPorCodigo(Long id) {
-		return null;
+	public Optional<Oportunidade> findByPorCodigo(Long id) {
+
+		Optional<Oportunidade> oportunidade = oportunidadeRepository.findById(id);
+
+		return oportunidade;
 	}
 
 }

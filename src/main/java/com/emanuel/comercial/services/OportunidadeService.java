@@ -1,6 +1,7 @@
 package com.emanuel.comercial.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.emanuel.comercial.model.Oportunidade;
 
@@ -14,6 +15,6 @@ public interface OportunidadeService {
 
 	void atualizar(Long id);
 
-	Oportunidade findByPorCodigo(Long id);
+	Optional<Oportunidade> findByPorCodigo(Long id);
 
 }

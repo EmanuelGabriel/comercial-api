@@ -2,11 +2,11 @@ package com.emanuel.comercial.model;
 
 import java.math.BigDecimal;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -32,9 +32,19 @@ public class Oportunidade {
 	@Min(value = 0, message = "Campo salário não pode iniciar com 0.")
 	@NotNull(message = "Campo salário não pode ser vazio")
 	private BigDecimal salario;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
+
+	@NotNull(message = "Empresa não pode ser vazia")
+	@ManyToOne
+	@JoinColumn(name = "empresa_id", nullable = false)
 	private Empresa empresa;
+
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
 
 	public Long getId() {
 		return id;
@@ -66,15 +76,6 @@ public class Oportunidade {
 
 	public void setSalario(BigDecimal salario) {
 		this.salario = salario;
-	}
-
-	
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
 	}
 
 	@Override

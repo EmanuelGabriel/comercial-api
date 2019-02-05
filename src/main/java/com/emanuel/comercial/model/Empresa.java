@@ -1,10 +1,14 @@
 package com.emanuel.comercial.model;
 
+import java.util.List;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -24,6 +28,17 @@ public class Empresa {
 
 	@Embedded
 	private Endereco endereco;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "empresa")
+	private List<Oportunidade> oportunidades;
+
+	public List<Oportunidade> getOportunidades() {
+		return oportunidades;
+	}
+
+	public void setOportunidades(List<Oportunidade> oportunidades) {
+		this.oportunidades = oportunidades;
+	}
 
 	public Long getId() {
 		return id;

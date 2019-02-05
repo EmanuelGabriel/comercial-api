@@ -42,28 +42,27 @@ public class OportunidadeResource {
 	@GetMapping
 	public ResponseEntity<List<Oportunidade>> listar() {
 
-		LOG.info("Listando todas as oportunidades");
-
 		List<Oportunidade> oportunidades = oportunidadeService.listarTodas();
 
 		if (oportunidades.isEmpty()) {
-			LOG.info("Nenhuma oportunidade encontrada!");
-			return new ResponseEntity<List<Oportunidade>>(HttpStatus.NOT_FOUND);
+			LOG.info("Não há lista de oportunidades!");
+			return new ResponseEntity<List<Oportunidade>>(oportunidades, HttpStatus.NOT_FOUND);
 
 		}
 		return new ResponseEntity<List<Oportunidade>>(oportunidades, HttpStatus.OK);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Oportunidade> buscarPorCodigo(@PathVariable Long id) {
+	@GetMapping("/{codigo}")
+	public ResponseEntity<Oportunidade> buscarPorId(@PathVariable Long codigo) {
 
-		Optional<Oportunidade> oportunidadeOptional = oportunidadeRepository.findById(id);
+		Optional<Oportunidade> oportunidadeOptional = oportunidadeService.findByPorCodigo(codigo);
 
-		if (oportunidadeOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi encontrado uma oportunidade ");
+		if (oportunidadeOptional.isEmpty()) {
+			LOG.info("Nenhuma oportunidade encontrada!");
+			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(oportunidadeOptional.get());
+		return new ResponseEntity<Oportunidade>(HttpStatus.OK);
 	}
 
 	@PostMapping
