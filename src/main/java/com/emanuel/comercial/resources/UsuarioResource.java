@@ -30,10 +30,11 @@ public class UsuarioResource {
 		List<Usuario> usuario = usuarioRepository.findAll();
 
 		if (usuario.isEmpty()) {
+			LOG.info("Nenhum usuário encontrado!");
 			return ResponseEntity.notFound().build();
 		}
 
-		return new ResponseEntity<List<Usuario>>(HttpStatus.OK);
+		return new ResponseEntity<List<Usuario>>(usuario, HttpStatus.OK);
 
 	}
 }
