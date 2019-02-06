@@ -1,22 +1,13 @@
 package com.emanuel.comercial.model;
 
-import java.util.List;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
-@AttributeOverride(name = "id", column = @Column(name = "pk_id"))
 public class Usuario {
 
 	@Id
@@ -24,23 +15,14 @@ public class Usuario {
 	private Long id;
 
 	@NotNull
-	@Size(min = 4, max = 120)
-	@Column(name = "nome", length = 120, nullable = false)
 	private String nome;
 
-	@Email
-	@NotNull
-	@NotEmpty
-	@Column(name = "email", length = 255, nullable = false, unique = true)
+	@Email(message = "E-mail inválido!")
 	private String email;
-
 	@NotNull
-	@Size(min = 80, max = 80)
-	@Column(name = "senha", length = 80, nullable = false)
 	private String senha;
-
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario")
-	private List<Pacote> pacotes;
+	@NotNull
+	private boolean admin = false;
 
 	public Long getId() {
 		return id;
@@ -74,12 +56,12 @@ public class Usuario {
 		this.senha = senha;
 	}
 
-	public List<Pacote> getPacotes() {
-		return pacotes;
+	public boolean isAdmin() {
+		return admin;
 	}
 
-	public void setPacotes(List<Pacote> pacotes) {
-		this.pacotes = pacotes;
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 	@Override
