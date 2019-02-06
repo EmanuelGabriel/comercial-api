@@ -1,33 +1,25 @@
 package com.emanuel.comercial.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.persistence.OneToMany;
 
 @Entity
-public class Usuario {
+public class Aluno {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@NotNull
 	private String nome;
 
-	@Email(message = "E-mail inválido!")
-	@NotNull(message = "E-mail não pode ser nulo")
-	@NotEmpty(message = "E-mail não pode ser vazio")
-	private String email;
-
-	@NotNull
-	private String senha;
-
-	@NotNull
-	private boolean admin = false;
+	// Por padrão as annotations que terminam com One (@OneToOne e @ManyToOne) são EAGER e as que terminam com Many (@OneToMany e @ManyToMany) são LAZY.
+	@OneToMany(fetch = FetchType.LAZY)
+	private List<Matricula> matriculas;
 
 	public Long getId() {
 		return id;
@@ -45,28 +37,12 @@ public class Usuario {
 		this.nome = nome;
 	}
 
-	public String getEmail() {
-		return email;
+	public List<Matricula> getMatriculas() {
+		return matriculas;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+	public void setMatriculas(List<Matricula> matriculas) {
+		this.matriculas = matriculas;
 	}
 
 	@Override
@@ -85,7 +61,7 @@ public class Usuario {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Usuario other = (Usuario) obj;
+		Aluno other = (Aluno) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

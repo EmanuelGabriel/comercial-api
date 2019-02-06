@@ -57,6 +57,20 @@ public class UsuarioResource {
 
 	}
 
+	@GetMapping("/{codigo}")
+	public ResponseEntity<Optional<Usuario>> buscarPorId(@PathVariable Long codigo) {
+
+		Optional<Usuario> usuarioOptional = usuarioService.buscarPeloCodigo(codigo);
+
+		if (!usuarioOptional.isPresent()) {
+			LOG.info("Nenhum código de usuário encontrado!");
+			return new ResponseEntity<Optional<Usuario>>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<Optional<Usuario>>(usuarioOptional, HttpStatus.OK);
+
+	}
+
 	@PutMapping("/{codigo}")
 	public ResponseEntity<Usuario> atualizar(@PathVariable Long codigo, @Valid @RequestBody Usuario usuario) {
 

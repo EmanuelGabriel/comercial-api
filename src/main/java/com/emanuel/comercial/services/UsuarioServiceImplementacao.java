@@ -34,4 +34,5 @@ public class UsuarioServiceImplementacao implements UsuarioService {
 	public Optional<Usuario> buscarPeloCodigo(Long id) {
 		return usuarioRepository.findById(id);
 	}
+
 }

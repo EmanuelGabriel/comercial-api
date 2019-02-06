@@ -11,6 +11,8 @@ public class ComercialApiApplicationTests {
 
 	@Test
 	public void testeTodos() {
+		
+		
 
 	}
 
