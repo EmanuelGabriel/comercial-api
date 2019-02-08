@@ -1,5 +1,6 @@
 package com.emanuel.comercial.resources;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,6 +124,20 @@ public class ProdutosResource {
 	@GetMapping("/verifica-desativado")
 	public List<Produto> verificarProdutosDesativados() {
 		return produtoRepository.findByAtivoFalse();
+	}
+
+	// Buscar onde a data cadastro está dentro de um período.
+	@GetMapping("/{iniciio}{fim}")
+	public ResponseEntity<List<Produto>> buscarProdutoPorData(Date inicio, Date fim) {
+
+		List<Produto> produto = produtoRepository.findByCadastroBetween(inicio, fim);
+
+		if (produto.isEmpty()) {
+			return new ResponseEntity<List<Produto>>(produto, HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<List<Produto>>(produto, HttpStatus.OK);
+
 	}
 
 }
