@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +31,8 @@ import com.emanuel.comercial.services.ProdutoServiceImplementacao;
 @RequestMapping("/produtos")
 public class ProdutosResource {
 
+	private final Logger LOG = LoggerFactory.getLogger(ProdutosResource.class);
+
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
@@ -41,13 +45,27 @@ public class ProdutosResource {
 	}
 
 	@GetMapping("/por-nome")
-	public Produto porNome(@RequestParam String nome) {
-		return produtoRepository.findByNome(nome);
+	public ResponseEntity<Optional<Produto>> porNome(@RequestParam String nome) {
+
+		Produto produto = produtoRepository.findByNome(nome);
+		if (produto == null) {
+			return new ResponseEntity<Optional<Produto>>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<Optional<Produto>>(HttpStatus.OK);
 	}
 
 	@GetMapping("/por-nome-comecando-com")
-	public List<Produto> porNomeComecandoCom(@RequestParam String nome) {
-		return produtoRepository.findByNomeStartingWithIgnoreCase(nome);
+	public ResponseEntity<List<Produto>> porNomeComecandoCom(@RequestParam String nome) {
+
+		List<Produto> produto = produtoRepository.findByNomeStartingWithIgnoreCase(nome);
+
+		if (produto.isEmpty()) {
+			LOG.info("Nenhum produto encontrado com este tipo de nome");
+			return new ResponseEntity<List<Produto>>(produto, HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<List<Produto>>(produto, HttpStatus.OK);
 	}
 
 	@GetMapping("/sem-descricao")
@@ -94,6 +112,17 @@ public class ProdutosResource {
 
 			@RequestParam(defaultValue = "DESC") Sort.Direction direcao) {
 		return produtoRepository.findAll(new PageRequest(pagina, numeroPorPagina, new Sort(direcao, ordenacao)));
+	}
+
+	@GetMapping("/verifica-ativo")
+	public List<Produto> verificarAtivos() {
+		return produtoRepository.findByAtivoTrue();
+
+	}
+
+	@GetMapping("/verifica-desativado")
+	public List<Produto> verificarProdutosDesativados() {
+		return produtoRepository.findByAtivoFalse();
 	}
 
 }
