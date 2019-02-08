@@ -1,20 +1,22 @@
 package com.emanuel.comercial.model;
 
-import javax.persistence.Column;
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Matricula {
+public class Autor implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(unique = true, nullable = false)
-	private String codigo;
+	private String nome;
+	private String email;
 
 	public Long getId() {
 		return id;
@@ -24,12 +26,20 @@ public class Matricula {
 		this.id = id;
 	}
 
-	public String getCodigo() {
-		return codigo;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override
@@ -48,7 +58,7 @@ public class Matricula {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Matricula other = (Matricula) obj;
+		Autor other = (Autor) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
