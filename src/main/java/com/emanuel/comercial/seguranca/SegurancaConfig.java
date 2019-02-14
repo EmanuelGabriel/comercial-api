@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -33,12 +32,11 @@ public class SegurancaConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-		auth.userDetailsService(userDetailServiceImplementacacao).passwordEncoder(new BCryptPasswordEncoder());
+		// userDetailsService(userDetailServiceImplementacacao).passwordEncoder(new
+		// BCryptPasswordEncoder());
 
-		/*
-		 * inMemoryAuthentication().withUser("Samuel").password("senha").roles("ADMIN")
-		 * .and().withUser("Francisco").password("senha").roles("USUARIO");
-		 */
+		auth.inMemoryAuthentication().withUser("Samuel").password("senha").roles("ADMIN")
+		.and().withUser("Francisco").password("senha").roles("USUARIO");
 
 	}
 
@@ -54,7 +52,6 @@ public class SegurancaConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return NoOpPasswordEncoder.getInstance();
-		// não faz a criptografia da senha
 	}
 
 }
