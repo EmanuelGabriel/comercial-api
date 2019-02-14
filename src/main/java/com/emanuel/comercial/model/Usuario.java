@@ -1,33 +1,72 @@
 package com.emanuel.comercial.model;
 
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	@NotNull
-	private String nome;
-
-	@Email(message = "E-mail inválido!")
-	@NotNull(message = "E-mail não pode ser nulo")
-	@NotEmpty(message = "E-mail não pode ser vazio")
-	private String email;
-
-	@NotNull
+	private String login;
 	private String senha;
+	
+	// Um para Muitos -> Um usuário(One) para muitos(Many) ROLES(permissões)
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "usuarios_role", joinColumns = @JoinColumn(name = "usuario_id",
+			// fazer referência no nome da coluna da tabela usuário
+			referencedColumnName = "id", table = "usuario"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id", table = "role"))
+	private List<Role> roles;
 
-	@NotNull
-	private boolean admin = false;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.roles;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.login;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 
 	public Long getId() {
 		return id;
@@ -37,20 +76,12 @@ public class Usuario {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getSenha() {
@@ -61,12 +92,12 @@ public class Usuario {
 		this.senha = senha;
 	}
 
-	public boolean isAdmin() {
-		return admin;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Override
